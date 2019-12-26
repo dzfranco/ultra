@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  # We can add more services if we need them, such as DB, cache, etc for ease of development
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: development
+  api:
+    build:
+      context: .
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 3000:3000
+      - 5858:5858
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www:cached
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '10'
+    command: yarn run start:dev
