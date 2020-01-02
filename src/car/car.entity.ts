@@ -6,6 +6,8 @@ import {
   JoinTable,
   ManyToOne,
   PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { CarInterface } from './interfaces/car.interface';
 import { ManufacturerInterface } from '../manufacturer/interfaces/manufacturer.interface';
@@ -31,6 +33,10 @@ export class Car implements CarInterface {
   @ManyToMany(type => Owner)
   @JoinTable()
   private owner: OwnerInterface[];
+  @CreateDateColumn()
+  private createdAt: Date;
+  @UpdateDateColumn()
+  private updatedAt: Date;
 
   /**
    * Getter $id
@@ -126,5 +132,37 @@ export class Car implements CarInterface {
    */
   public set $owner(value: OwnerInterface[]) {
     this.owner = value;
+  }
+
+  /**
+   * Getter $createdAt
+   * @return {Date}
+   */
+  public get $createdAt(): Date {
+    return this.createdAt;
+  }
+
+  /**
+   * Setter $createdAt
+   * @param {Date} value
+   */
+  public set $createdAt(value: Date) {
+    this.createdAt = value;
+  }
+
+  /**
+   * Getter $updatedAt
+   * @return {Date}
+   */
+  public get $updatedAt(): Date {
+    return this.updatedAt;
+  }
+
+  /**
+   * Setter $updatedAt
+   * @param {Date} value
+   */
+  public set $updatedAt(value: Date) {
+    this.updatedAt = value;
   }
 }
