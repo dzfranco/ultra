@@ -1,17 +1,16 @@
 import {
   IsNumber,
   IsPositive,
-  IsDateString,
-  IsInt,
   IsString,
   IsNotEmpty,
+  IsDate,
 } from 'class-validator';
 
 export class CreateCarDTO {
   @IsNumber()
   @IsPositive()
   public readonly price: number;
-  @IsDateString()
+  @IsDate()
   public readonly firstRegistrationDate: Date;
   @IsString()
   @IsNotEmpty()
