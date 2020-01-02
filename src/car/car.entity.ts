@@ -4,17 +4,26 @@ import {
   Column,
   ManyToMany,
   JoinTable,
+  ManyToOne,
+  PrimaryColumn,
 } from 'typeorm';
 import { CarInterface } from './interfaces/car.interface';
 import { ManufacturerInterface } from '../manufacturer/interfaces/manufacturer.interface';
 import { OwnerInterface } from '../owner/interfaces/owner.interface';
 import { Owner } from '../owner/owner.entity';
+import { Manufacturer } from '../manufacturer/manufacturer.entity';
 
 @Entity()
 export class Car implements CarInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn('varchar', { length: 30 })
   private id: string;
+  @ManyToOne(
+    type => Manufacturer,
+    manufacturer => manufacturer.$id,
+  )
   private manufacturer: ManufacturerInterface;
+  @Column('varchar', { length: 30 })
+  private manufacturerId: string;
   @Column('float')
   private price: number;
   @Column('date')
@@ -53,6 +62,22 @@ export class Car implements CarInterface {
    */
   public set $manufacturer(value: ManufacturerInterface) {
     this.manufacturer = value;
+  }
+
+  /**
+   * Getter $manufacturerId
+   * @return {string}
+   */
+  public get $manufacturerId(): string {
+    return this.manufacturerId;
+  }
+
+  /**
+   * Setter $manufacturerId
+   * @param {string} value
+   */
+  public set $manufacturerId(value: string) {
+    this.manufacturerId = value;
   }
 
   /**

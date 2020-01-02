@@ -4,6 +4,7 @@ import { ManufacturerInterface } from '../../manufacturer/interfaces/manufacture
 export interface CarInterface {
   $id: string;
   $manufacturer: ManufacturerInterface;
+  $manufacturerId: string;
   $price: number;
   $firstRegistrationDate: Date;
   $owner: OwnerInterface[];

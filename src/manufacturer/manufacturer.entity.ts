@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Manufacturer {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn('varchar', { length: 32 })
   private id: string;
   @Column()
   private name: string;
