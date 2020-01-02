@@ -1,5 +1,5 @@
-export interface Owner {
-  id: string;
-  name: string;
-  purchaseDate: Date;
+export interface OwnerInterface {
+  $id: string;
+  $name: string;
+  $purchaseDate: Date;
 }

@@ -1,10 +1,10 @@
-import { Owner } from '../../owner/interfaces/owner.interface';
-import { Manufacturer } from '../../manufacturer/interfaces/manufacturer.interface';
+import { OwnerInterface } from '../../owner/interfaces/owner.interface';
+import { ManufacturerInterface } from '../../manufacturer/interfaces/manufacturer.interface';
 
-export interface Car {
-  id: string;
-  manufacturer: Manufacturer;
-  price: number;
-  firstRegistrationDate: Date;
-  owner: Owner;
+export interface CarInterface {
+  $id: string;
+  $manufacturer: ManufacturerInterface;
+  $price: number;
+  $firstRegistrationDate: Date;
+  $owner: OwnerInterface[];
 }

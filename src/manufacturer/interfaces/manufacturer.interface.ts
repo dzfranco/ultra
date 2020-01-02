@@ -1,6 +1,6 @@
-export interface Manufacturer {
-  id: string;
-  name: string;
-  phone: string;
-  siret: number;
+export interface ManufacturerInterface {
+  $id: string;
+  $name: string;
+  $phone: string;
+  $siret: number;
 }
