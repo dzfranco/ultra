@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { CarModule } from './car/car.module';
 import { ManufacturerModule } from './manufacturer/manufacturer.module';
 import { OwnerModule } from './owner/owner.module';
+import { TriggersModule } from './triggers/triggers.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { OwnerModule } from './owner/owner.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    TriggersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

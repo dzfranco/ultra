@@ -30,7 +30,7 @@ export class Car implements CarInterface {
   private price: number;
   @Column('date')
   private firstRegistrationDate: Date;
-  @ManyToMany(type => Owner)
+  @ManyToMany(type => Owner, { cascade: true })
   @JoinTable()
   private owner: OwnerInterface[];
   @CreateDateColumn()

@@ -2,6 +2,7 @@ import ObjectId from 'bson-objectid';
 import { Injectable, Inject } from '@nestjs/common';
 import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { InjectRepository } from '@nestjs/typeorm';
+import { subMonths } from 'date-fns';
 import { Repository } from 'typeorm';
 import { Car } from './car.entity';
 import { CarInterface } from './interfaces/car.interface';
@@ -93,5 +94,33 @@ export class CarService {
       throw new HttpException('Manufacturer not found', 404);
     }
     return manufacturer;
+  }
+
+  /**
+   * @description Discounts all cars between 12 and 18 months
+   * @return Promise<any>
+   * @memberof CarService
+   */
+  public async discountCars(): Promise<any> {
+    const maxPercentage = 100;
+    const discountPercentage = 20;
+    const multiplicationFactor =
+      (maxPercentage - discountPercentage) / maxPercentage;
+    const now = new Date();
+    const lowerBound = subMonths(now, 18);
+    const upperBound = subMonths(now, 12);
+    const results = await this.carRepository
+      .createQueryBuilder()
+      .update(Car)
+      .set({ price: () => `price * ${multiplicationFactor}` } as any)
+      .where(
+        `firstRegistrationDate < :upperBound AND firstRegistrationDate > :lowerBound`,
+        {
+          upperBound,
+          lowerBound,
+        },
+      )
+      .execute();
+    return results;
   }
 }

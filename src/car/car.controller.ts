@@ -53,4 +53,10 @@ export class CarsController {
     const updatedCar = await this.carService.update(updateCarDTO);
     return updatedCar;
   }
+
+  @Post('/trigger-discount')
+  public async triggerDiscount() {
+    const results = await this.carService.discountCars();
+    return results;
+  }
 }
