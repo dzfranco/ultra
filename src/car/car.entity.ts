@@ -8,6 +8,7 @@ import {
   PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { CarInterface } from './interfaces/car.interface';
 import { ManufacturerInterface } from '../manufacturer/interfaces/manufacturer.interface';
@@ -30,8 +31,10 @@ export class Car implements CarInterface {
   private price: number;
   @Column('date')
   private firstRegistrationDate: Date;
-  @ManyToMany(type => Owner, { cascade: true })
-  @JoinTable()
+  @OneToMany(
+    type => Owner,
+    owner => owner.$car,
+  )
   private owner: OwnerInterface[];
   @CreateDateColumn()
   private createdAt: Date;

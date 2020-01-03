@@ -1,14 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { OwnerInterface } from './interfaces/owner.interface';
+import { Car } from '../car/car.entity';
 
 @Entity()
 export class Owner implements OwnerInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn('varchar', { length: 30 })
   private id: string;
   @Column()
   private name: string;
   @Column('date')
   private purchaseDate: Date;
+
+  @ManyToOne(
+    type => Car,
+    car => car.$owner,
+  )
+  private car: Car;
 
   /**
    * Getter $id
@@ -56,5 +69,21 @@ export class Owner implements OwnerInterface {
    */
   public set $purchaseDate(value: Date) {
     this.purchaseDate = value;
+  }
+
+  /**
+   * Getter $car
+   * @return {Car}
+   */
+  public get $car(): Car {
+    return this.car;
+  }
+
+  /**
+   * Setter $car
+   * @param {Car} value
+   */
+  public set $car(value: Car) {
+    this.car = value;
   }
 }
