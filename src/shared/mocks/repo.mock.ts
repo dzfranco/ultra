@@ -1,6 +1,7 @@
 export class GenericRepo {
   public findOne;
   public update;
+  public save;
   public insert;
   public remove;
   public createQueryBuilder;
@@ -8,6 +9,7 @@ export class GenericRepo {
   constructor() {
     this.findOne = jest.fn().mockReturnValue({});
     this.update = jest.fn().mockReturnValue({});
+    this.save = jest.fn().mockReturnValue({});
     this.insert = jest.fn().mockReturnValue({});
     this.remove = jest.fn().mockReturnValue({});
     this.createQueryBuilder = jest.fn().mockReturnValue({

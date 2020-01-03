@@ -10,6 +10,7 @@ import { GenericRepo } from '../shared/mocks/repo.mock';
 import {
   CreateCarDTOFactoryMock,
   CarFactoryMock,
+  UpdateCarDTOFactoryMock,
 } from './mock/car.controller.mock';
 
 describe('CarsController', () => {
@@ -84,6 +85,22 @@ describe('CarsController', () => {
           firstRegistrationDate: carDto.firstRegistrationDate,
           manufacturerId: carDto.manufacturerId,
           price: carDto.price,
+        }),
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('should update the right object', async () => {
+      const carDto = UpdateCarDTOFactoryMock();
+
+      await carService.update(carDto);
+      expect(carsRepo.findOne).toHaveBeenCalledWith(carDto.id);
+      expect(carsRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          $firstRegistrationDate: carDto.firstRegistrationDate,
+          $manufacturerId: carDto.manufacturerId,
+          $price: carDto.price,
         }),
       );
     });
