@@ -1,6 +1,6 @@
 # My Microservice
 
-This repo is just a simple games management API sample
+This repo is just a simple cars management API sample
 
 - [My Microservice](#my-microservice)
   - [About this repo](#about-this-repo)
