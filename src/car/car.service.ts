@@ -31,7 +31,7 @@ export class CarService {
       pipeline = pipeline.where('id < :id', { id: query.previousCursor });
     }
     pipeline = pipeline.orderBy('createdAt', 'DESC').limit(query.limit);
-    const cars = (await pipeline.execute()) as Car[];
+    const cars = await pipeline.getMany();
     return cars;
   }
 

@@ -20,6 +20,7 @@ export class GenericRepo {
       limit: jest.fn().mockReturnThis(),
       delete: jest.fn().mockReturnThis(),
       execute: jest.fn().mockReturnThis(),
+      getMany: jest.fn().mockReturnThis(),
     });
   }
 }
