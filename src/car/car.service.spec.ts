@@ -98,6 +98,7 @@ describe('CarsController', () => {
       expect(carsRepo.findOne).toHaveBeenCalledWith(carDto.id);
       expect(carsRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
+          $id: carDto.id,
           $firstRegistrationDate: carDto.firstRegistrationDate,
           $manufacturerId: carDto.manufacturerId,
           $price: carDto.price,

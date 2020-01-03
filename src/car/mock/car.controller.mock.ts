@@ -38,3 +38,17 @@ export const CarFactoryMock = () => {
   car1.$price = 29.99;
   return car1;
 };
+
+export const CarFactoryWithParamsMock = (
+  id?: string,
+  manufacturerId?: string,
+  firstRegistrationDate?: Date,
+  price?: number,
+) => {
+  const car1 = new Car();
+  car1.$id = id;
+  car1.$manufacturerId = manufacturerId;
+  car1.$firstRegistrationDate = firstRegistrationDate;
+  car1.$price = price;
+  return car1;
+};

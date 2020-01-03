@@ -65,6 +65,7 @@ export class CarService {
     if (!foundCar) {
       throw new HttpException('Car Not Found', 404);
     }
+    foundCar.$id = carData.id;
     foundCar.$firstRegistrationDate = new Date(carData.firstRegistrationDate);
     foundCar.$manufacturerId = carData.manufacturerId;
     foundCar.$price = carData.price;
