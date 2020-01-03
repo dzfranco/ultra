@@ -31,7 +31,7 @@ That should start MySQL and the project. You could also run the following and ru
 
 ## Endpoints
 
-The endpoints can be found [here](https://danielfranco.docs.apiary.io/#reference)
+The endpoints can be found [here](https://cars48.docs.apiary.io/#)
 
 ## Other Goodies
 
