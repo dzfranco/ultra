@@ -33,7 +33,6 @@ describe('CarsController', () => {
 
   describe('findAll', () => {
     it('should return an array of cars', async () => {
-      const result = [];
       jest
         .spyOn(carService, 'findAll')
         .mockImplementation(async () => CarArrayFactoryMock());
