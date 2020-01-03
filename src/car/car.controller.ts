@@ -62,10 +62,4 @@ export class CarsController {
     const removedCar = await this.carService.remove(id);
     return removedCar;
   }
-
-  @Post('/trigger-discount')
-  public async triggerDiscount() {
-    const results = await this.carService.discountCars();
-    return results;
-  }
 }
