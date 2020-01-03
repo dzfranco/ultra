@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Manufacturer } from './manufacturer.entity';
 import { Repository } from 'typeorm';
-import { ManufacturerInterface } from '../../dist/manufacturer/interfaces/manufacturer.interface';
+import { ManufacturerInterface } from './interfaces/manufacturer.interface';
 
 @Injectable()
 export class ManufacturerService {

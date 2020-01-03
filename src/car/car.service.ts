@@ -9,6 +9,7 @@ import { CreateCarDTO } from './dto/create-car.dto';
 import { ListCarDto } from './dto/list-car.dto';
 import { ManufacturerInterface } from '../manufacturer/interfaces/manufacturer.interface';
 import { ManufacturerService } from '../manufacturer/manufacturer.service';
+import { UpdateCarDTO } from './dto/update-car.dto';
 
 @Injectable()
 export class CarService {
@@ -52,6 +53,24 @@ export class CarService {
     } catch (error) {
       throw error;
     }
+  }
+
+  /**
+   * @description Updates a Car
+   * @param  {UpdateCarDTO} carData
+   * @return Promise<CarInterface>
+   * @memberof CarService
+   */
+  public async update(carData: UpdateCarDTO): Promise<CarInterface> {
+    const foundCar = await this.carRepository.findOne(carData.id);
+    if (!foundCar) {
+      throw new HttpException('Car Not Found', 404);
+    }
+    foundCar.$firstRegistrationDate = carData.firstRegistrationDate;
+    foundCar.$manufacturerId = carData.manufacturerId;
+    foundCar.$price = carData.price;
+    const savedCar = await this.carRepository.save(foundCar);
+    return savedCar;
   }
 
   /**
