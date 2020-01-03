@@ -9,8 +9,6 @@ import {
   CarFactoryMock,
   ManufacturerMock,
 } from './mock/car.controller.mock';
-import { async } from 'rxjs/internal/scheduler/async';
-import { Manufacturer } from '../manufacturer/manufacturer.entity';
 
 describe('CarsController', () => {
   const findOne = jest.fn().mockReturnValue({});
