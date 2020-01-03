@@ -37,6 +37,20 @@ describe('CarsController', () => {
   let carService: CarService;
 
   beforeEach(async () => {
+    carsRepo = {
+      findOne,
+      update,
+      save,
+      remove,
+      createQueryBuilder: jest.fn().mockReturnValue({
+        update: updateSpy,
+        set: setSpy,
+        where: whereSpy,
+        orderBy: orderBySpy,
+        limit: limitSpy,
+        execute: executeSpy,
+      }),
+    };
     const module = await Test.createTestingModule({
       providers: [
         CarService,
@@ -53,12 +67,23 @@ describe('CarsController', () => {
   });
 
   describe('findAll', () => {
-    it('should use the right query', async () => {
+    it('should use the right query when there is no previous cursor', async () => {
       const query = new ListCarDto();
       query.limit = 1;
       query.previousCursor = '';
       await carService.findAll(query);
-      expect(carsRepo.createQueryBuilder).toHaveBeenCalled();
+      expect(carsRepo.createQueryBuilder).toBeCalledTimes(1);
+      expect(orderBySpy).toBeCalledWith('createdAt', 'DESC');
+      expect(limitSpy).toBeCalledWith(query.limit);
+    });
+
+    it('should use the right query when there is a previous cursor', async () => {
+      const query = new ListCarDto();
+      query.limit = 1;
+      query.previousCursor = 'abc123';
+      await carService.findAll(query);
+      expect(carsRepo.createQueryBuilder).toBeCalledTimes(1);
+      expect(whereSpy).toBeCalledWith('id < :id', { id: query.previousCursor });
       expect(orderBySpy).toBeCalledWith('createdAt', 'DESC');
       expect(limitSpy).toBeCalledWith(query.limit);
     });
