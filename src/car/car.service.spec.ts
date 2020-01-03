@@ -6,44 +6,33 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Car } from './car.entity';
 import { ManufacturerService } from '../manufacturer/manufacturer.service';
 import { ManufacturerMock } from '../manufacturer/mock/manufacturer.mock';
+import { GenericRepo } from '../shared/mocks/repo.mock';
 import {
   CreateCarDTOFactoryMock,
   CarFactoryMock,
 } from './mock/car.controller.mock';
 
 describe('CarsController', () => {
-  const findOne = jest.fn().mockReturnValue({});
-  const update = jest.fn().mockReturnValue({});
-  const insert = jest.fn().mockReturnValue({});
-  const remove = jest.fn().mockReturnValue({});
-  const updateSpy = jest.fn().mockReturnThis();
-  const setSpy = jest.fn().mockReturnThis();
-  const whereSpy = jest.fn().mockReturnThis();
-  const orderBySpy = jest.fn().mockReturnThis();
-  const limitSpy = jest.fn().mockReturnThis();
-  const executeSpy = jest.fn().mockReturnThis();
-
-  let carsRepo;
+  let carsRepo: GenericRepo;
+  let orderBySpy;
+  let whereSpy;
+  let limitSpy;
   const manufacturerService: Partial<ManufacturerService> = {
     getManufacturerById: jest.fn().mockReturnValue({}),
   };
   let carService: CarService;
-
   beforeEach(async () => {
-    carsRepo = {
-      findOne,
-      update,
-      insert,
-      remove,
-      createQueryBuilder: jest.fn().mockReturnValue({
-        update: updateSpy,
-        set: setSpy,
-        where: whereSpy,
-        orderBy: orderBySpy,
-        limit: limitSpy,
-        execute: executeSpy,
-      }),
-    };
+    carsRepo = new GenericRepo();
+    orderBySpy = jest
+      .spyOn(carsRepo.createQueryBuilder(), 'orderBy')
+      .mockReturnThis();
+    whereSpy = jest
+      .spyOn(carsRepo.createQueryBuilder(), 'where')
+      .mockReturnThis();
+    limitSpy = jest
+      .spyOn(carsRepo.createQueryBuilder(), 'limit')
+      .mockReturnThis();
+    jest.restoreAllMocks();
 
     const module = await Test.createTestingModule({
       providers: [
@@ -54,7 +43,6 @@ describe('CarsController', () => {
     }).compile();
 
     carService = module.get<CarService>(CarService);
-    jest.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -67,17 +55,17 @@ describe('CarsController', () => {
       query.limit = 1;
       query.previousCursor = '';
       await carService.findAll(query);
-      expect(carsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(orderBySpy).toBeCalledWith('createdAt', 'DESC');
       expect(limitSpy).toBeCalledWith(query.limit);
     });
 
     it('should use the right query when there is a previous cursor', async () => {
       const query = new ListCarDto();
+
       query.limit = 1;
       query.previousCursor = 'abc123';
       await carService.findAll(query);
-      expect(carsRepo.createQueryBuilder).toBeCalledTimes(1);
+
       expect(whereSpy).toHaveBeenNthCalledWith(1, 'id < :id', {
         id: query.previousCursor,
       });
