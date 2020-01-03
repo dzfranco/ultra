@@ -14,9 +14,8 @@ import { UpdateCarDTO } from './dto/update-car.dto';
 @Injectable()
 export class CarService {
   constructor(
-    @InjectRepository(Car) private readonly carRepository: Repository<Car>,
-    @Inject(ManufacturerService)
     private readonly manufacturerService: ManufacturerService,
+    @InjectRepository(Car) private readonly carRepository: Repository<Car>,
   ) {}
 
   /**
@@ -66,7 +65,7 @@ export class CarService {
     if (!foundCar) {
       throw new HttpException('Car Not Found', 404);
     }
-    foundCar.$firstRegistrationDate = carData.firstRegistrationDate;
+    foundCar.$firstRegistrationDate = new Date(carData.firstRegistrationDate);
     foundCar.$manufacturerId = carData.manufacturerId;
     foundCar.$price = carData.price;
     const savedCar = await this.carRepository.save(foundCar);
