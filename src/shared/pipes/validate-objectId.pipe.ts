@@ -12,7 +12,7 @@ export class ValidateObjectIdPipe implements PipeTransform<string, string> {
     if (ObjectId.isValid(value)) {
       return value;
     } else {
-      throw new BadRequestException('Validation Failed');
+      throw new BadRequestException('Id Validation Failed');
     }
   }
 }

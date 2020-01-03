@@ -75,6 +75,21 @@ export class CarService {
   }
 
   /**
+   * @description Removes a car
+   * @param  {string} carId
+   * @return Promise<CarInterface>
+   * @memberof CarService
+   */
+  public async remove(carId: string): Promise<CarInterface> {
+    const foundCar = await this.carRepository.findOne(carId);
+    if (!foundCar) {
+      throw new HttpException('Car Not Found', 404);
+    }
+    const removedCar = await this.carRepository.remove(foundCar);
+    return removedCar;
+  }
+
+  /**
    * @description Gets the manufacturer of a car
    * @param  {string} carId
    * @return Promise<CarInterface>

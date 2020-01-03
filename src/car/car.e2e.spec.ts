@@ -1,23 +1,26 @@
 import * as request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { CarService } from './car.service';
 import { CarModule } from './car.module';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Car } from './car.entity';
 import { ManufacturerService } from '../manufacturer/manufacturer.service';
 import { Manufacturer } from '../manufacturer/manufacturer.entity';
+import { CarFactoryMock } from './mock/car.controller.mock';
 
 describe('CarsController', () => {
   let app: INestApplication;
-  let manufacturerService = {
+  const manufacturerService = {
     getManufacturerById: () => ({}),
   };
-  let carService = {
+  const carService = {
     findAll: () => [],
     create: carData => {
       return {};
     },
+    update: () => ({}),
+    remove: () => CarFactoryMock(),
   };
 
   beforeAll(async () => {
@@ -81,5 +84,58 @@ describe('CarsController', () => {
       },
       message: 'Input data validation failed',
     });
+  });
+
+  it(`/PUT cars should validate ID`, async () => {
+    const response = await request(app.getHttpServer())
+      .put('/cars/abc123')
+      .send({
+        manufacturerId: 'abc123',
+        price: 59,
+        firstRegistrationDate: '2012-03-29T10:05:45-06:00',
+      });
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      message: 'Id Validation Failed',
+      statusCode: 400,
+    });
+  });
+
+  it(`/PUT cars should respond`, async () => {
+    const response = await request(app.getHttpServer())
+      .put('/cars/5e0e6ced773aa10037912792')
+      .send({
+        manufacturerId: 'abc123',
+        price: 59,
+        firstRegistrationDate: '2012-03-29T10:05:45-06:00',
+      });
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(carService.create({}));
+  });
+
+  it(`/PUT cars validates format`, async () => {
+    const response = await request(app.getHttpServer())
+      .put('/cars/1')
+      .send({});
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({
+      errors: {
+        firstRegistrationDateisDate:
+          'firstRegistrationDate must be a Date instance',
+        manufacturerIdisNotEmpty: 'manufacturerId should not be empty',
+        manufacturerIdisString: 'manufacturerId must be a string',
+        priceisNumber:
+          'price must be a number conforming to the specified constraints',
+        priceisPositive: 'price must be a positive number',
+      },
+      message: 'Input data validation failed',
+    });
+  });
+
+  it(`/DELETE should respond`, async () => {
+    const response = await request(app.getHttpServer()).delete(
+      '/cars/5e0e6ced773aa10037912792',
+    );
+    expect(response.status).toBe(200);
   });
 });

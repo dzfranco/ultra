@@ -7,6 +7,7 @@ import {
   Query,
   Param,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { CarService } from './car.service';
 import { CarInterface } from './interfaces/car.interface';
@@ -46,12 +47,20 @@ export class CarsController {
   @UsePipes(new ValidationPipe())
   @Put(':id')
   public async update(
-    @Param('id') id: string,
+    @Param('id', new ValidateObjectIdPipe()) id: string,
     @Body() updateCarDTO: UpdateCarDTO,
   ): Promise<any> {
     updateCarDTO.id = id;
     const updatedCar = await this.carService.update(updateCarDTO);
     return updatedCar;
+  }
+
+  @Delete('/:id')
+  public async remove(
+    @Param('id', new ValidateObjectIdPipe()) id: string,
+  ): Promise<any> {
+    const removedCar = await this.carService.remove(id);
+    return removedCar;
   }
 
   @Post('/trigger-discount')

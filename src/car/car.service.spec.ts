@@ -133,4 +133,32 @@ describe('CarService', () => {
       });
     });
   });
+
+  describe('removeCar', () => {
+    it('should call the remove method', async () => {
+      const carMock = CarFactoryMock();
+      const spy = jest.spyOn(carsRepo, 'findOne').mockImplementation(() => {
+        return Promise.resolve(carMock);
+      });
+      const removeSpy = jest
+        .spyOn(carsRepo, 'remove')
+        .mockImplementation(() => {
+          return Promise.resolve(carMock);
+        });
+      const removedCar = await carService.remove('');
+      expect(spy).toHaveBeenCalled();
+      expect(removeSpy).toHaveBeenCalled();
+      expect(removedCar).toEqual(carMock);
+    });
+
+    it('should throw an error when no car is found', async () => {
+      const spy = jest.spyOn(carsRepo, 'findOne').mockImplementation(() => {
+        return Promise.resolve(undefined);
+      });
+      await expect(carService.remove('')).rejects.toMatchObject({
+        message: 'Car Not Found',
+        status: 404,
+      });
+    });
+  });
 });
