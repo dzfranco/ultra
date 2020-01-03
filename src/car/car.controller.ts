@@ -6,12 +6,15 @@ import {
   Body,
   Query,
   Param,
+  Put,
 } from '@nestjs/common';
 import { CarService } from './car.service';
 import { CarInterface } from './interfaces/car.interface';
 import { ValidationPipe } from '../shared/pipes/validation.pipe';
 import { CreateCarDTO } from './dto/create-car.dto';
 import { ListCarDto } from './dto/list-car.dto';
+import { UpdateCarDTO } from './dto/update-car.dto';
+import { ValidateObjectIdPipe } from '../shared/pipes/validate-objectId.pipe';
 
 @Controller('cars')
 export class CarsController {
@@ -33,8 +36,21 @@ export class CarsController {
   }
 
   @Get(':id/manufacturer')
-  public async getManufacturer(@Param('id') id: string): Promise<any> {
+  public async getManufacturer(
+    @Param('id', new ValidateObjectIdPipe()) id: string,
+  ): Promise<any> {
     const manufacturer = await this.carService.getCarManufacturer(id);
     return manufacturer;
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Put(':id')
+  public async update(
+    @Param('id') id: string,
+    @Body() updateCarDTO: UpdateCarDTO,
+  ): Promise<any> {
+    updateCarDTO.id = id;
+    const updatedCar = await this.carService.update(updateCarDTO);
+    return updatedCar;
   }
 }
