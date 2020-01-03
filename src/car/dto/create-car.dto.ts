@@ -9,10 +9,10 @@ import {
 export class CreateCarDTO {
   @IsNumber()
   @IsPositive()
-  public readonly price: number;
+  public price: number;
   @IsDate()
-  public readonly firstRegistrationDate: Date;
+  public firstRegistrationDate: Date;
   @IsString()
   @IsNotEmpty()
-  public readonly manufacturerId: string;
+  public manufacturerId: string;
 }

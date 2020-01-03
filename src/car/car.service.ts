@@ -40,7 +40,7 @@ export class CarService {
       const car = new Car();
       car.$id = new ObjectId().toHexString();
       car.$price = carData.price;
-      car.$manufacturerId = carData.manufacturerId.toString();
+      car.$manufacturerId = carData.manufacturerId;
       car.$firstRegistrationDate = new Date(carData.firstRegistrationDate);
       await this.carRepository.insert(car);
       return car;
