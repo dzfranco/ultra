@@ -8,7 +8,7 @@ export class Manufacturer {
   private name: string;
   @Column()
   private phone: string;
-  @Column('int')
+  @Column('bigint')
   private siret: number;
 
   /**
