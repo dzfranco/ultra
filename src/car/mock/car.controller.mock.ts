@@ -1,6 +1,5 @@
 import { Car } from '../car.entity';
 import { CreateCarDTO } from '../dto/create-car.dto';
-import { Manufacturer } from '../../manufacturer/manufacturer.entity';
 
 export const CarArrayFactoryMock = () => {
   const car1 = new Car();
@@ -28,13 +27,4 @@ export const CarFactoryMock = () => {
   car1.$manufacturerId = 'abc';
   car1.$price = 29.99;
   return car1;
-};
-
-export const ManufacturerMock = () => {
-  const manufacturer = new Manufacturer();
-  manufacturer.$id = 'abc';
-  manufacturer.$name = 'test';
-  manufacturer.$phone = '484848';
-  manufacturer.$siret = 478489498;
-  return manufacturer;
 };

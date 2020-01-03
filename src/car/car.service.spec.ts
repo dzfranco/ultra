@@ -4,10 +4,11 @@ import { CarService } from './car.service';
 import { ListCarDto } from './dto/list-car.dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Car } from './car.entity';
+import { ManufacturerService } from '../manufacturer/manufacturer.service';
+import { ManufacturerMock } from '../manufacturer/mock/manufacturer.mock';
 import {
   CreateCarDTOFactoryMock,
   CarFactoryMock,
-  ManufacturerMock,
 } from './mock/car.controller.mock';
 
 describe('CarsController', () => {
@@ -23,6 +24,9 @@ describe('CarsController', () => {
   const executeSpy = jest.fn().mockReturnThis();
 
   let carsRepo;
+  const manufacturerService: Partial<ManufacturerService> = {
+    getManufacturerById: jest.fn().mockReturnValue({}),
+  };
   let carService: CarService;
 
   beforeEach(async () => {
@@ -40,10 +44,12 @@ describe('CarsController', () => {
         execute: executeSpy,
       }),
     };
+
     const module = await Test.createTestingModule({
       providers: [
         CarService,
         { provide: getRepositoryToken(Car), useValue: carsRepo },
+        { provide: ManufacturerService, useValue: manufacturerService },
       ],
     }).compile();
 
@@ -99,15 +105,15 @@ describe('CarsController', () => {
     it('should find a car', async () => {
       const carMock = CarFactoryMock();
       const manufacturer = ManufacturerMock();
-      const carSpy = jest
-        .spyOn(carMock, '$manufacturer', 'get')
+      const manufacturerServiceSpy = jest
+        .spyOn(manufacturerService, 'getManufacturerById')
         .mockReturnValue(Promise.resolve(manufacturer));
       const spy = jest.spyOn(carsRepo, 'findOne').mockImplementation(() => {
         return Promise.resolve(carMock);
       });
       const foundManufacturer = await carService.getCarManufacturer('1');
       expect(spy).toHaveBeenCalled();
-      expect(carSpy).toHaveBeenCalled();
+      expect(manufacturerServiceSpy).toHaveBeenCalled();
       expect(foundManufacturer).toEqual(manufacturer);
     });
 
