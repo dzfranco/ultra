@@ -29,6 +29,8 @@ $ docker-compose up
 
 That should start MySQL and the project. You could also run the following and run the container with an active MySQL Database.
 
+Remember that the API will start on port 3000, thus the URL would be http://127.0.0.1:3000
+
 ## Endpoints
 
 The endpoints can be found [here](https://cars48.docs.apiary.io/#)
