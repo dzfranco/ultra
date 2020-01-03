@@ -5,6 +5,7 @@ import { Manufacturer } from './manufacturer.entity';
 import { Repository } from 'typeorm';
 import { ManufacturerInterface } from './interfaces/manufacturer.interface';
 import { CreateManufacturerDTO } from './dto/create-manufacturer.dto';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 
 @Injectable()
 export class ManufacturerService {
@@ -29,6 +30,25 @@ export class ManufacturerService {
     manufacturer.$siret = manufacturerData.$siret;
     await this.manufacturerRepository.insert(manufacturer);
     return manufacturer;
+  }
+
+  /**
+   * @description Removes a manufacturer
+   * @param  {string} manufacturerId
+   * @return Promise<ManufacturerInterface>
+   * @memberof ManufacturerService
+   */
+  public async removeManufacturer(
+    manufacturerId: string,
+  ): Promise<ManufacturerInterface> {
+    const foundManufacturer = await this.manufacturerRepository.findOne(
+      manufacturerId,
+    );
+    if (!foundManufacturer) {
+      throw new HttpException('Manufacturer Not Found', 404);
+    }
+    await this.manufacturerRepository.remove(foundManufacturer);
+    return foundManufacturer;
   }
 
   /**
