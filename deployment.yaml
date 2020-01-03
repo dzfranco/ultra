@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: ultra-test
+  namespace: staging
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      workload.user.cattle.io/workloadselector: deployment-staging-ultra-test
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    spec:
+      containers:
+        - image: myrepo/ultra-test:stg-${CICD_GIT_COMMIT}
+          imagePullPolicy: Always
+          name: ultra-test
+          env:
+            - name: DATABASE_TYPE
+              value: mysql
+            - name: DATABASE_PORT
+              value: 3306
+            - name: DATABASE_HOST
+              value: '127.0.0.1'
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_USERNAME
+                  name: mysql-keys
+                  optional: false
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: mysql-keys
+                  optional: false
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_NAME
+                  name: mysql-keys
+                  optional: false
+          ports:
+            - containerPort: 3000
+              name: 3000tcp80
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: myrepo
+      restartPolicy: Always
+      schedulerName: default-scheduler
