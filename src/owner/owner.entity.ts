@@ -16,6 +16,8 @@ export class Owner implements OwnerInterface {
   private name: string;
   @Column('date')
   private purchaseDate: Date;
+  @Column({ length: 30 })
+  private carId: string;
 
   @ManyToOne(
     type => Car,
@@ -85,5 +87,21 @@ export class Owner implements OwnerInterface {
    */
   public set $car(value: Car) {
     this.car = value;
+  }
+
+  /**
+   * Getter $carId
+   * @return {string}
+   */
+  public get $carId(): string {
+    return this.carId;
+  }
+
+  /**
+   * Setter $carId
+   * @param {string} value
+   */
+  public set $carId(value: string) {
+    this.carId = value;
   }
 }
