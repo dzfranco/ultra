@@ -5,7 +5,7 @@ import { ManufacturerService } from '../manufacturer/manufacturer.service';
 import { Manufacturer } from './manufacturer.entity';
 import { GenericRepo } from '../shared/mocks/repo.mock';
 
-describe('CarsController', () => {
+describe('ManufacturerService', () => {
   let manufacturerService: ManufacturerService;
   let manufacturerRepo: GenericRepo;
 

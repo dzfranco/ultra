@@ -13,7 +13,7 @@ import {
   UpdateCarDTOFactoryMock,
 } from './mock/car.controller.mock';
 
-describe('CarsController', () => {
+describe('CarService', () => {
   let carsRepo: GenericRepo;
   let orderBySpy;
   let whereSpy;

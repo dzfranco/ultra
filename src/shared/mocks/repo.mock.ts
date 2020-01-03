@@ -18,6 +18,7 @@ export class GenericRepo {
       where: jest.fn().mockReturnThis(),
       orderBy: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
+      delete: jest.fn().mockReturnThis(),
       execute: jest.fn().mockReturnThis(),
     });
   }
