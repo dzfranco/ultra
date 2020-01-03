@@ -5,9 +5,14 @@ import { CarService } from './car.service';
 import { CarModule } from './car.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Car } from './car.entity';
+import { ManufacturerService } from '../manufacturer/manufacturer.service';
+import { Manufacturer } from '../manufacturer/manufacturer.entity';
 
 describe('CarsController', () => {
   let app: INestApplication;
+  let manufacturerService = {
+    getManufacturerById: () => ({}),
+  };
   let carService = {
     findAll: () => [],
     create: carData => {
@@ -19,10 +24,15 @@ describe('CarsController', () => {
     const module = await Test.createTestingModule({
       imports: [CarModule],
     })
+      .overrideProvider(getRepositoryToken(Manufacturer))
+      .useValue({})
+      .overrideProvider(ManufacturerService)
+      .useValue(manufacturerService)
       .overrideProvider(getRepositoryToken(Car))
       .useValue({})
       .overrideProvider(CarService)
       .useValue(carService)
+
       .compile();
 
     app = module.createNestApplication();
