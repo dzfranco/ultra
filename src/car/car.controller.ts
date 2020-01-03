@@ -1,4 +1,12 @@
-import { Controller, Get, UsePipes, Post, Body, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UsePipes,
+  Post,
+  Body,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { CarService } from './car.service';
 import { CarInterface } from './interfaces/car.interface';
 import { ValidationPipe } from '../shared/pipes/validation.pipe';
@@ -17,8 +25,16 @@ export class CarsController {
 
   @UsePipes(new ValidationPipe())
   @Post()
-  public async createCar(@Body() createCarDTO: CreateCarDTO): Promise<any> {
+  public async createCar(
+    @Body() createCarDTO: CreateCarDTO,
+  ): Promise<CarInterface> {
     const createdCar = await this.carService.create(createCarDTO);
     return createdCar;
+  }
+
+  @Get(':id/manufacturer')
+  public async getManufacturer(@Param('id') id: string): Promise<any> {
+    const manufacturer = await this.carService.getCarManufacturer(id);
+    return manufacturer;
   }
 }

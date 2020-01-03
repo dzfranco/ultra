@@ -1,11 +1,13 @@
-import { Injectable, Query } from '@nestjs/common';
+import ObjectId from 'bson-objectid';
+import { Injectable } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions/http.exception';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Car } from './car.entity';
 import { Repository } from 'typeorm';
+import { Car } from './car.entity';
 import { CarInterface } from './interfaces/car.interface';
 import { CreateCarDTO } from './dto/create-car.dto';
-import ObjectId from 'bson-objectid';
 import { ListCarDto } from './dto/list-car.dto';
+import { ManufacturerInterface } from '../manufacturer/interfaces/manufacturer.interface';
 
 @Injectable()
 export class CarService {
@@ -47,5 +49,22 @@ export class CarService {
     } catch (error) {
       throw error;
     }
+  }
+
+  /**
+   * @description Gets the manufacturer of a car
+   * @param  {string} carId
+   * @return Promise<CarInterface>
+   * @memberof CarService
+   */
+  public async getCarManufacturer(
+    carId: string,
+  ): Promise<ManufacturerInterface> {
+    const foundCar = await this.carRepository.findOne(carId);
+    if (!foundCar) {
+      throw new HttpException('Car Not Found', 404);
+    }
+    const manufacturer = await foundCar.$manufacturer;
+    return manufacturer;
   }
 }

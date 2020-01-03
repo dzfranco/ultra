@@ -23,7 +23,7 @@ export class Car implements CarInterface {
     type => Manufacturer,
     manufacturer => manufacturer.$id,
   )
-  private manufacturer: ManufacturerInterface;
+  private manufacturer: Promise<ManufacturerInterface>;
   @Column('varchar', { length: 30 })
   private manufacturerId: string;
   @Column('float')
@@ -56,17 +56,17 @@ export class Car implements CarInterface {
 
   /**
    * Getter $manufacturer
-   * @return {ManufacturerInterface}
+   * @return {Promise<ManufacturerInterface>}
    */
-  public get $manufacturer(): ManufacturerInterface {
+  public get $manufacturer(): Promise<ManufacturerInterface> {
     return this.manufacturer;
   }
 
   /**
    * Setter $manufacturer
-   * @param {ManufacturerInterface} value
+   * @param {Promise<ManufacturerInterface>} value
    */
-  public set $manufacturer(value: ManufacturerInterface) {
+  public set $manufacturer(value: Promise<ManufacturerInterface>) {
     this.manufacturer = value;
   }
 

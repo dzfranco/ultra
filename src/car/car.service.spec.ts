@@ -4,7 +4,13 @@ import { CarService } from './car.service';
 import { ListCarDto } from './dto/list-car.dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Car } from './car.entity';
-import { CreateCarDTOFactoryMock } from './mock/car.controller.mock';
+import {
+  CreateCarDTOFactoryMock,
+  CarFactoryMock,
+  ManufacturerMock,
+} from './mock/car.controller.mock';
+import { async } from 'rxjs/internal/scheduler/async';
+import { Manufacturer } from '../manufacturer/manufacturer.entity';
 
 describe('CarsController', () => {
   const findOne = jest.fn().mockReturnValue({});
@@ -88,6 +94,33 @@ describe('CarsController', () => {
           price: carDto.price,
         }),
       );
+    });
+  });
+
+  describe('getCarManufacturer', () => {
+    it('should find a car', async () => {
+      const carMock = CarFactoryMock();
+      const manufacturer = ManufacturerMock();
+      const carSpy = jest
+        .spyOn(carMock, '$manufacturer', 'get')
+        .mockReturnValue(Promise.resolve(manufacturer));
+      const spy = jest.spyOn(carsRepo, 'findOne').mockImplementation(() => {
+        return Promise.resolve(carMock);
+      });
+      const foundManufacturer = await carService.getCarManufacturer('1');
+      expect(spy).toHaveBeenCalled();
+      expect(carSpy).toHaveBeenCalled();
+      expect(foundManufacturer).toEqual(manufacturer);
+    });
+
+    it('should throw an error when no car is found', async () => {
+      const spy = jest.spyOn(carsRepo, 'findOne').mockImplementation(() => {
+        return Promise.resolve(undefined);
+      });
+      await expect(carService.getCarManufacturer('')).rejects.toMatchObject({
+        message: 'Car Not Found',
+        status: 404,
+      });
     });
   });
 });
